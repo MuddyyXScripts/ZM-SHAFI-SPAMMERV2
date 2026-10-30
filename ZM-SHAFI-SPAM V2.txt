@@ -1,0 +1,130 @@
+-- [[ PROJECT: ZM_SHAFI SPAMMER V2 ]] --
+-- [[ OWNER: SHAFI ]] --
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TextChatService = game:GetService("TextChatService")
+local TweenService = game:GetService("TweenService")
+local SoundService = game:GetService("SoundService")
+local RunService = game:GetService("RunService")
+local CoreGui = game:GetService("CoreGui")
+
+local lp = Players.LocalPlayer
+local state = { active = false, mini = false, count = 0 }
+
+-- Music Setup
+local m1 = Instance.new("Sound", SoundService)
+m1.SoundId = "rbxassetid://89700384406008"
+m1.Volume = 0.5; m1.Looped = true
+
+local m2 = Instance.new("Sound", SoundService)
+m2.SoundId = "rbxassetid://78735782383680"
+m2.Volume = 0.5; m2.Looped = true
+
+-- Chat Function
+local function sendChat(msg)
+    pcall(function()
+        if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+            TextChatService.TextChannels.RBXGeneral:SendAsync(msg)
+        else
+            local r = (ReplicatedStorage:FindFirstChild("SayMessageRequest", true) or 
+                      ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents"):FindFirstChild("SayMessageRequest"))
+            if r then r:FireServer(msg, "All") end
+        end
+    end)
+end
+
+-- Database: [TMKx ME WORD] EMOJI
+local words = {
+    "[TMKx ME CHAI] ", "[TMKx ME NITROGEN] 💥", "[TMKx ME VENOM] 🐍", "[TMKx ME KILLA] 💀", 
+    "[TMKx ME DEMON] 😈", "[TMKx ME ZODIAC] 🌌", "[TMKx ME GLITCH] 👾", "[TMKx ME RASMALAI] 🎀", 
+    "[TMKx ME HORROR] 🤡", "[TMKx ME THUNDER] ", "[TMKx ME PICHA] 🍑", "[TMKx ME LEGEND] 👑",
+    "[TMKx ME PSYCHO] 🧠", "[TMKx ME GHOST] 👻", "[TMKx ME SAVAGE] 🦁", "[TMKx ME DANGER] ⚠️",
+    "[TMKx ME TOXIC] ☣️", "[TMKx ME ERROR] 🚫", "[TMKx ME HACKER] 💻", "[TMKx ME VIPER] 🦂",
+    "[TMKx ME ZOMBIE] 🧟", "[TMKx ME BULLET] 🔫", "[TMKx ME FOSSIL] 🦖", "[TMKx ME DESTROY] 💣",
+    "[TMKx ME POISON] 🧪", "[TMKx ME STORM] 🌪", "[TMKx ME JOKER] 🃏", "[TMKx ME CRAZY] 🌀",
+    "[TMKx ME MAFIA] 🕶", "[TMKx ME PHANTOM] 👤", "[TMKx ME RAGE] 😡", "[TMKx ME ULTRA] 💎",
+    "[TMKx ME OMEGA] 🔱", "[TMKx ME SIGMA] 🗿", "[TMKx ME CHAD] 🦾", "[TMKx ME KHAN] 👑",
+    "[TMKx ME BADSHAH] 🔥", "[TMKx ME KING] 🤴", "[TMKx ME SMOKE] 🌬", "[TMKx ME REBEL] 🏴‍☠",
+    "[TMKx ME HYPRA] 🛰", "[TMKx ME LUCIFER] 👿"
+}
+
+-- UI Setup (Rainbow Border & Minimizable)
+local parent = (RunService:IsStudio() and lp:WaitForChild("PlayerGui") or CoreGui)
+if parent:FindFirstChild("SHAFI_V2_FINAL") then parent["SHAFI_V2_FINAL"]:Destroy() end
+
+local sg = Instance.new("ScreenGui", parent); sg.Name = "SHAFI_V2_FINAL"; sg.ResetOnSpawn = false
+
+local main = Instance.new("Frame", sg)
+main.Size = UDim2.new(0, 190, 0, 420); main.Position = UDim2.new(0.5, -95, 0.3, 0)
+main.BackgroundColor3 = Color3.fromRGB(10, 10, 12); main.Active = true; main.Draggable = true; main.ClipsDescendants = true
+Instance.new("UICorner", main).CornerRadius = UDim.new(0, 12)
+
+-- Rainbow Border
+local stroke = Instance.new("UIStroke", main); stroke.Thickness = 2
+task.spawn(function()
+    while task.wait(0.02) do
+        stroke.Color = Color3.fromHSV(tick() % 5 / 5, 0.8, 1)
+    end
+end)
+
+local head = Instance.new("Frame", main); head.Size = UDim2.new(1, 0, 0, 45); head.BackgroundTransparency = 1
+local tit = Instance.new("TextLabel", head); tit.Size = UDim2.new(1, 0, 1, 0); tit.Text = "SHAFI SPAM V2"; tit.TextColor3 = Color3.new(1,1,1); tit.Font = "GothamBlack"; tit.BackgroundTransparency = 1; tit.TextSize = 14
+local min = Instance.new("TextButton", head); min.Size = UDim2.new(0, 30, 0, 30); min.Position = UDim2.new(1, -35, 0, 7); min.Text = "�?"; min.TextColor3 = Color3.new(1,1,1); min.BackgroundTransparency = 1
+
+local cont = Instance.new("Frame", main); cont.Size = UDim2.new(1, 0, 1, -45); cont.Position = UDim2.new(0, 0, 0, 45); cont.BackgroundTransparency = 1
+
+-- Minimizable Function
+min.MouseButton1Click:Connect(function()
+    state.mini = not state.mini
+    min.Text = state.mini and "+" or "�?"; cont.Visible = not state.mini
+    local targetSize = state.mini and UDim2.new(0, 190, 0, 45) or UDim2.new(0, 190, 0, 420)
+    TweenService:Create(main, TweenInfo.new(0.4), {Size = targetSize}):Play()
+end)
+
+local function createBox(ph, y)
+    local b = Instance.new("TextBox", cont); b.Size = UDim2.new(0.85, 0, 0, 30); b.Position = UDim2.new(0.075, 0, y, 0)
+    b.PlaceholderText = ph; b.BackgroundColor3 = Color3.fromRGB(20, 20, 25); b.TextColor3 = Color3.new(1, 1, 1); b.Font = "Gotham"; b.TextSize = 10; Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6); return b
+end
+
+local targetInput = createBox("Target User", 0.02)
+local speedInput = createBox("Speed (Default 1.0)", 0.12); speedInput.Text = "1.0"
+local patternInput = createBox("Pattern (@@@@)", 0.22); patternInput.Text = "@@@@"
+
+local function createBtn(txt, y, clr, ht, fn)
+    local b = Instance.new("TextButton", cont); b.Size = UDim2.new(0.85, 0, 0, ht); b.Position = UDim2.new(0.075, 0, y, 0)
+    b.Text = txt; b.BackgroundColor3 = clr; b.TextColor3 = Color3.new(1, 1, 1); b.Font = "GothamBold"; b.TextSize = 10; Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6); b.MouseButton1Click:Connect(fn)
+end
+
+createBtn("MUSIC 1 🎵", 0.35, Color3.fromRGB(40, 40, 50), 28, function() m2:Stop(); m1:Play() end)
+createBtn("MUSIC 2 🎵", 0.44, Color3.fromRGB(40, 40, 50), 28, function() m1:Stop(); m2:Play() end)
+createBtn("STOP MUSIC 🔇", 0.53, Color3.fromRGB(30, 30, 35), 28, function() m1:Stop(); m2:Stop() end)
+createBtn("START ATTACK 🔥", 0.70, Color3.fromRGB(0, 150, 80), 35, function() state.active = true end)
+createBtn("STOP ATTACK 🛑", 0.81, Color3.fromRGB(180, 50, 60), 35, function() state.active = false end)
+
+-- Spammer Loop with Your Bypass Formula
+task.spawn(function()
+    while true do
+        task.wait()
+        if state.active then
+            local currentPattern = patternInput.Text
+            local target = (targetInput.Text ~= "" and targetInput.Text:upper() or "USER")
+            local word = words[math.random(1, #words)]
+            
+            -- Your Formula Applied
+            local base = " " .. target .. " " .. word
+            local repCount = math.floor((198 - #base) / #currentPattern)
+            local finalMessage = string.rep(currentPattern, repCount) .. base
+            
+            sendChat(finalMessage)
+            
+            state.count = state.count + 1
+            if state.count >= 10 then 
+                task.wait(8.5) 
+                state.count = 0 
+            else 
+                task.wait(tonumber(speedInput.Text) or 1) 
+            end
+        end
+    end
+end)
